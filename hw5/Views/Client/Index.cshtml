@@ -1,0 +1,66 @@
+@using TaskItem = global::Task
+@model List<TaskItem>
+
+<h1>Tasks Client</h1>
+
+<h3>Add task</h3>
+<form action="/client/create" method="post">
+    <p>Id: <input type="number" name="Id" /></p>
+    <p>Title: <input type="text" name="Title" /></p>
+    <p>Description: <input type="text" name="Description" /></p>
+    <p>IsCompleted: <input type="checkbox" name="IsCompleted" value="true" /><input type="hidden" name="IsCompleted" value="false" /></p>
+    <button type="submit">Add</button>
+</form>
+
+<h3>Edit task</h3>
+<form action="/client/update" method="post">
+    <p>Id: <input type="number" name="Id" /></p>
+    <p>Title: <input type="text" name="Title" /></p>
+    <p>Description: <input type="text" name="Description" /></p>
+    <p>IsCompleted: <input type="checkbox" name="IsCompleted" value="true" /><input type="hidden" name="IsCompleted" value="false" /></p>
+    <button type="submit">Save</button>
+</form>
+
+<h3>Search task</h3>
+<form action="/client/details" method="get">
+    <input type="number" name="id" placeholder="Id" />
+    <button type="submit">Find</button>
+</form>
+
+@if (ViewBag.FoundTask != null)
+{
+    TaskItem f = ViewBag.FoundTask;
+    <p>Found: Id=@f.Id, Title=@f.Title, Description=@f.Description, IsCompleted=@f.IsCompleted</p>
+}
+@if (ViewBag.NotFound == true)
+{
+    <p>Task not found</p>
+}
+
+<h3>All tasks</h3>
+<table border="1">
+    <tr>
+        <th>Id</th>
+        <th>Title</th>
+        <th>Description</th>
+        <th>IsCompleted</th>
+        <th>Action</th>
+    </tr>
+    @if (Model != null)
+    {
+        foreach (var t in Model)
+        {
+            <tr>
+                <td>@t.Id</td>
+                <td>@t.Title</td>
+                <td>@t.Description</td>
+                <td>@t.IsCompleted</td>
+                <td>
+                    <form action="/client/delete/@t.Id" method="post">
+                        <button type="submit">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    }
+</table>
